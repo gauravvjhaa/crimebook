@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "512034669842",
+    "project_id": "crimedataindia",
+    "storage_bucket": "crimedataindia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512034669842:android:500b9c741b985d6b519fcb",
+        "android_client_info": {
+          "package_name": "com.example.crimebook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "512034669842-ol5qgo378t1a6spor7m4uqa2ekf5t4p1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.crimebook",
+            "certificate_hash": "ea140cf134f09161ec1bd718c27da97aceeb6469"
+          }
+        },
+        {
+          "client_id": "512034669842-bh4du1cn6ktlphs838ekrso9qbbbdp7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCETQ3NIwtI5C6IAFKKx-DvOmKuYsqYUE8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "512034669842-bh4du1cn6ktlphs838ekrso9qbbbdp7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
