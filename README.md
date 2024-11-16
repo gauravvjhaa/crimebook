@@ -28,7 +28,7 @@ CrimeBook is a mobile application developed to make crime data more accessible a
 ### Backend
 - **Firebase Authentication**: Secure user authentication.
 - **Firestore Cloud**: Reliable cloud database for managing user data.
-- **Flutter-Python API**: For advanced backend processing of data.
+- **Firestore-NCBR data API**: For advanced backend processing of data.
 
 ### APIs
 - **News API**: Powers real-time personalized crime news and alerts.
@@ -39,7 +39,7 @@ CrimeBook is a mobile application developed to make crime data more accessible a
 
 1. **Frontend**: User interaction and visualization using Flutter.
 2. **Backend**: Firebase for authentication and data storage.
-3. **Processing API**: Python backend for advanced data processing.
+3. **Processing API**: Firestore cloud backend for advanced data processing.
 4. **Data Visualization**: Syncfusion charts for user-friendly data display.
 
 ---
@@ -147,4 +147,3 @@ For queries or feedback, contact:
 📧 indiannikhil12@gmail.com
 📧 vishwajeetnandyaduraj786@gmail.com
 📧 rajshakya.orai18@gmail.com
-
