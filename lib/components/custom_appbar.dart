@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -116,6 +119,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   // Profile menu with logout and profile options
   void _showProfileMenu(BuildContext context) {
+    String clientId;
+    if (kIsWeb) {
+      clientId = '512034669842-bh4du1cn6ktlphs838ekrso9qbbbdp7a.apps.googleusercontent.com';
+    } else if (Platform.isAndroid) {
+      clientId = '512034669842-ol5qgo378t1a6spor7m4uqa2ekf5t4p1.apps.googleusercontent.com';
+    } else {
+      clientId = 'YOUR_IOS_CLIENT_ID';
+    }
+
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -170,7 +182,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         leading: const Icon(Icons.logout),
                         title: const Text('Log out'),
                         onTap: () async {
-                          GoogleSignIn googleSignIn = GoogleSignIn();
+                          GoogleSignIn googleSignIn = GoogleSignIn(clientId: clientId);
                           if (await googleSignIn.isSignedIn()) {
                             await googleSignIn.signOut();
                             await googleSignIn.disconnect();

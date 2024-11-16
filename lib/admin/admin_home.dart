@@ -63,6 +63,13 @@ class HomeScreenAdmin extends StatelessWidget {
                 },
               ),
               MenuCard(
+                text: 'Add Crime Data',
+                icon: Icons.book,
+                onTap: () {
+                  Get.toNamed('/addCrimeData');
+                },
+              ),
+              MenuCard(
                 text: 'Log Out',
                 icon: Icons.logout,
                 onTap: () async {

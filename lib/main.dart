@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
+import 'admin/add_data.dart';
 import 'admin/admin_home.dart';
 import 'admin/check_for_deletion.dart';
 import 'admin/check_logs.dart';
@@ -19,7 +20,6 @@ import 'app_screens/main_screen.dart';
 import 'app_screens/news_detail_screen.dart';
 import 'app_screens/profile_screen.dart';
 import 'controllers/user_controller.dart';
-import 'bard_help.dart';
 
 void main() async {
 
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/adminCheckLogs', page: () => CheckLogsScreen()),
         GetPage(name: '/adminUserReports', page: () => AdminFeedbackScreen()),
         GetPage(name: '/feedback', page: () => FeedbackScreen()),
-        GetPage(name: '/aiTalk', page: () => AssistantGemini()),
+        GetPage(name: '/addCrimeData', page: () => AddDataPage()),
       ],
     );
   }

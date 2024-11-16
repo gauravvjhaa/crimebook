@@ -120,13 +120,13 @@ class _AlertScreenState extends State<AlertScreen> {
           String? safetyTip = await generateSafetyTipWithGemini(title, location);
 
           alerts.add(CrimeAlert(
-            warningMessage: warningMessage ?? "Alert message not available",
+            warningMessage: warningMessage ?? "Alert message can't be shown due to ethical reasons",
             summary: summary,
             location: location,
             date: DateTime.parse(publishedAt),
             url: url,
             severity: Severity.high,
-            safetyTip: safetyTip ?? "Safety tip not available",
+            safetyTip: safetyTip ?? "Safety tip can't be shown due to ethical reasons",
           ));
         }
 
@@ -152,7 +152,7 @@ class _AlertScreenState extends State<AlertScreen> {
   Future<String?> generateWarningMessageWithGemini(String title, String location) async {
     try {
       final response = await gemini.text(
-          "Create a personalized warning message based on the following title: '$title' for incidents in '$location'. Keep it direct, like: 'Look at this incident in your city.'");
+          "Create a personalized warning message based on the following title: '$title' for incidents in '$location'. Keep it direct, like: 'Look at this incident in your city.' and also make sure to keep it concise, and it should sound good too, don't use '*' unnecessarily, okay?  ");
       return response?.output?.trim();
     } catch (e) {
       return null;
@@ -230,7 +230,9 @@ class _AlertScreenState extends State<AlertScreen> {
       children: [
         SpinKitSpinningLines(color: Colors.blue, size: 50),
         SizedBox(height: 20),
-        _buildShimmerEffect(),
+        SingleChildScrollView(
+          child: _buildShimmerEffect(),
+        ),
       ],
     );
   }
@@ -241,7 +243,7 @@ class _AlertScreenState extends State<AlertScreen> {
       highlightColor: Colors.grey[100]!,
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: 10,
+        itemCount: 5,
         itemBuilder: (context, index) => _buildShimmerItem(),
       ),
     );
