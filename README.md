@@ -1,6 +1,6 @@
 # 📱 CrimeBook
 
-CrimeBook is a mobile application developed to make crime data more accessible and engaging for the general public, law enforcement, and researchers. By transforming raw crime data from trusted government sources into dynamic and interactive visualizations, CrimeBook empowers users to explore crime trends, hotspots, and patterns with ease.
+CrimeBook is a mobile application developed to make crime data more accessible and engaging for the general public, and researchers. By transforming raw crime data from trusted government sources into dynamic and interactive visualizations, CrimeBook empowers users to explore crime trends, hotspots, and patterns with ease.
 
 ---
 
