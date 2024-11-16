@@ -143,4 +143,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 For queries or feedback, contact:
 ```text
 📧 gauravkumarjha306@cic.du.ac.in
+📧 kjkrishnapoet27@gmail.com
+📧 indiannikhil12@gmail.com
+📧 vishwajeetnandyaduraj786@gmail.com
+📧 rajshakya.orai18@gmail.com
 
