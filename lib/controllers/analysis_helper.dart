@@ -98,7 +98,8 @@ class AnalysisHelper {
       };
     } catch (e) {
       // Handle specific exceptions if needed
-      throw Exception('Error fetching data: ${e.toString()}');
+      // throw Exception('Error fetching data: ${e.toString()}');
+      throw Exception('Sorry, No data found for selected choices');
     }
   }
 

@@ -12,6 +12,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:crimebook/controllers/user_controller.dart';
 import 'package:crimebook/components/colors_file.dart';
 
+import '../components/custom_dropdown.dart';
+import '../controllers/data_lists.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -40,39 +43,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isLoading = false; // For loading indicator
   bool hasChanged = false; // To track if any changes were made
 
-  // List of valid Indian states
-  final List<String> indianStates = [
-    'Andhra Pradesh',
-    'Arunachal Pradesh',
-    'Assam',
-    'Bihar',
-    'Chhattisgarh',
-    'Goa',
-    'Gujarat',
-    'Haryana',
-    'Himachal Pradesh',
-    'Jharkhand',
-    'Karnataka',
-    'Kerala',
-    'Madhya Pradesh',
-    'Maharashtra',
-    'Manipur',
-    'Meghalaya',
-    'Mizoram',
-    'Nagaland',
-    'Odisha',
-    'Punjab',
-    'Rajasthan',
-    'Sikkim',
-    'Tamil Nadu',
-    'Telangana',
-    'Tripura',
-    'Uttar Pradesh',
-    'Uttarakhand',
-    'West Bengal',
-    'Delhi',
-    'Puducherry'
-  ];
 
   // Variables to hold original data for comparison
   String originalName = '';
@@ -161,26 +131,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     }
 
-    // if (stateController.text.isNotEmpty &&
-    //     stateController.text != 'Not provided') {
-    //   // Make validation case-insensitive
-    //   String inputState = stateController.text.toLowerCase();
-    //   List<String> lowerCaseStates =
-    //   indianStates.map((state) => state.toLowerCase()).toList();
-    //   if (!lowerCaseStates.contains(inputState)) {
-    //     Get.snackbar(
-    //       'Error',
-    //       'Please enter a valid Indian state.',
-    //       snackPosition: SnackPosition.BOTTOM,
-    //       backgroundColor: Colors.red[100],
-    //     );
-    //     return;
-    //   } else {
-    //     int index = lowerCaseStates.indexOf(inputState);
-    //     stateController.text = indianStates[index];
-    //   }
-    // }
-
     setState(() {
       isLoading = true;
     });
@@ -229,7 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : 'Not provided',
         'state': stateController.text.isNotEmpty
             ? stateController.text
-            : 'Not provided',
+            : 'N.A.',
         'dob': dobController.text.isNotEmpty
             ? DateFormat('dd/MMM/yyyy')
             .parse(dobController.text)
@@ -439,7 +389,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               isEnabled: false),
                           buildProfileField(
                               'Phone', 'Enter your phone number', phoneController),
-                          buildProfileField('State', 'Enter your state', stateController),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Text(
+                                    'State :',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 7,
+                                  child: CustomDropdown(
+                                    items: indianStatesAndTerritoriesModified,
+                                    selectedValue: stateController.text.isNotEmpty ? stateController.text : 'N.A.',
+                                    hint: 'Select your state',
+                                    hintTextColor: Colors.black,
+                                    itemTextColor: Colors.black,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        stateController.text = value ?? 'N.A.';
+                                        if (stateController.text != originalState) {
+                                          hasChanged = true;
+                                        }
+                                      });
+                                    },
+                                    isSearchable: true,
+                                    buttonDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.white,
+                                      ),
+                                      color: Colors.white,
+                                    ),
+                                    icon: Icons.arrow_drop_down,
+                                    iconEnabledColor: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           buildDOBField(
                               'D.O.B', 'Enter your date of birth', dobController),
                           buildGenderDropdown(),

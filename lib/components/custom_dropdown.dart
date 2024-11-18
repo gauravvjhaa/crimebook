@@ -1,4 +1,4 @@
-// custom_dropdown.dart
+// components/custom_dropdown.dart
 
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -19,6 +19,8 @@ class CustomDropdown extends StatefulWidget {
   final Color? iconEnabledColor;
   final Color? iconDisabledColor;
   final double? iconSize;
+  final Color? hintTextColor;
+  final Color? itemTextColor;
 
   const CustomDropdown({
     Key? key,
@@ -37,6 +39,8 @@ class CustomDropdown extends StatefulWidget {
     this.iconEnabledColor,
     this.iconDisabledColor,
     this.iconSize,
+    this.hintTextColor,
+    this.itemTextColor,
   }) : super(key: key);
 
   @override
@@ -83,7 +87,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
           widget.hint,
           style: TextStyle(
             fontSize: 14,
-            color: isDarkMode ? Colors.white : Colors.black,
+            color: widget.hintTextColor ?? (isDarkMode ? Colors.white : Colors.black),
           ),
         ),
         items: _items
@@ -93,7 +97,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
             item,
             style: TextStyle(
               fontSize: 14,
-              color: isDarkMode ? Colors.white : Colors.black,
+              color: widget.itemTextColor ?? (isDarkMode ? Colors.white : Colors.black),
             ),
           ),
         ))
