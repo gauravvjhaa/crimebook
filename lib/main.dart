@@ -69,5 +69,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/addCrimeData', page: () => AddDataPage()),
       ],
     );
+
   }
 }
