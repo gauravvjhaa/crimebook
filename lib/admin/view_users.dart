@@ -155,7 +155,7 @@ Team CrimeBook
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         centerTitle: true, // Center the title
         title: const Text(
           'View Users',

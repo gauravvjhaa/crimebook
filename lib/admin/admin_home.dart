@@ -13,6 +13,7 @@ class HomeScreenAdmin extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: const Text(
             'Admin Portal',
             style: TextStyle(

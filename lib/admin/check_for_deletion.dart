@@ -21,7 +21,6 @@ class _DeletionRequestsScreenState extends State<DeletionRequestsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         title: Text(
           'Deletion Requests',
           style: TextStyle(
@@ -36,10 +35,7 @@ class _DeletionRequestsScreenState extends State<DeletionRequestsScreen> {
       ),
       backgroundColor: Colors.black,
       body: StreamBuilder<QuerySnapshot>(
-        stream: firestore
-            .collection('users')
-            .where('deletionScheduledOn', isNotEqualTo: null)
-            .snapshots(),
+        stream: firestore.collection('deletions').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -52,95 +48,117 @@ class _DeletionRequestsScreenState extends State<DeletionRequestsScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
-          final users = snapshot.data!.docs;
+          final deletionRequests = snapshot.data!.docs;
 
-          if (users.isEmpty) {
-            return Center(
-              child: Text(
-                'No deletion requests found',
-                style: TextStyle(color: Colors.white),
-              ),
+          // If the collection has data, display the note and either the list or the empty message
+          if (deletionRequests.isNotEmpty) {
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Note: Only users past 30 days of deletion requests can be deleted.',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: deletionRequests.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot deletionDoc = deletionRequests[index];
+                      Map<String, dynamic> deletionData =
+                      deletionDoc.data() as Map<String, dynamic>;
+                      String userId = deletionData['userId'] ?? 'No User ID';
+                      String name = deletionData['name'] ?? 'No Name';
+                      String email = deletionData['email'] ?? 'No Email';
+                      Timestamp? deletionRequestedOn = deletionData['requestedOn'];
+
+                      if (deletionRequestedOn != null) {
+                        DateTime deletionDate = deletionRequestedOn.toDate();
+
+                        DateTime currentDate = DateTime.now();
+                        bool canDelete = currentDate.isAfter(
+                            deletionDate.add(Duration(days: 30))); // Check if 30 days have passed
+
+                        return Card(
+                          color: Colors.grey[900],
+                          margin:
+                          EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                          child: ListTile(
+                            title: Text(
+                              name,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            subtitle: Text(
+                              'Requested on: ${DateFormat('dd MMM yyyy, hh:mm a').format(deletionDate)}',
+                              style: TextStyle(color: Colors.white70),
+                            ),
+                            trailing: canDelete
+                                ? IconButton(
+                              icon: Icon(Icons.delete, color: Colors.red),
+                              onPressed: () async {
+                                // Confirm deletion
+                                bool confirm = await showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    backgroundColor: Colors.grey[900],
+                                    title: Text(
+                                      'Confirm Deletion',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    content: Text(
+                                      'Are you sure you want to delete this user?',
+                                      style: TextStyle(color: Colors.white70),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        child: Text('Cancel'),
+                                        onPressed: () => Navigator.of(context)
+                                            .pop(false),
+                                      ),
+                                      ElevatedButton(
+                                        child: Text('Delete'),
+                                        onPressed: () => Navigator.of(context)
+                                            .pop(true),
+                                      ),
+                                    ],
+                                  ),
+                                );
+
+                                if (confirm == true) {
+                                  await _deleteUserAndData(
+                                      userId, email, name);
+                                }
+                              },
+                            )
+                                : Text(
+                              'Can be deleted after 30 days',
+                              style: TextStyle(
+                                  color: Colors.white70, fontSize: 12),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                    },
+                  ),
+                ),
+              ],
             );
           }
 
-          return ListView.builder(
-            itemCount: users.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot userDoc = users[index];
-              Map<String, dynamic> userData =
-              userDoc.data() as Map<String, dynamic>;
-              String userId = userDoc.id;
-              String name = userData['firstName'] ?? 'No Name';
-              String email = userData['email'] ?? 'No Email';
-              Timestamp? deletionScheduledOn = userData['deletionScheduledOn'];
-
-              // Check if 'deletionScheduledOn' exists and is a Timestamp
-              if (deletionScheduledOn != null) {
-                DateTime deletionDate = deletionScheduledOn.toDate();
-
-                DateTime currentDate = DateTime.now();
-                bool canDelete = currentDate.isAfter(deletionDate);
-
-                return Card(
-                  color: Colors.grey[900],
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ListTile(
-                    title: Text(
-                      name,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    subtitle: Text(
-                      'Scheduled deletion on: ${DateFormat('dd MMM yyyy, hh:mm a').format(deletionDate)}',
-                      style: TextStyle(color: Colors.white70),
-                    ),
-                    trailing: canDelete
-                        ? IconButton(
-                      icon: Icon(Icons.delete, color: Colors.red),
-                      onPressed: () async {
-                        // Confirm deletion
-                        bool confirm = await showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            backgroundColor: Colors.grey[900],
-                            title: Text(
-                              'Confirm Deletion',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            content: Text(
-                              'Are you sure you want to delete this user?',
-                              style: TextStyle(color: Colors.white70),
-                            ),
-                            actions: [
-                              TextButton(
-                                child: Text('Cancel'),
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
-                              ),
-                              ElevatedButton(
-                                child: Text('Delete'),
-                                onPressed: () =>
-                                    Navigator.of(context).pop(true),
-                              ),
-                            ],
-                          ),
-                        );
-
-                        if (confirm == true) {
-                          await _deleteUserAndData(userId, email, name);
-                        }
-                      },
-                    )
-                        : null,
-                  ),
-                );
-              } else {
-                // Skip users without 'deletionScheduledOn' field
-                return SizedBox.shrink();
-              }
-            },
+          // If no requests are present, show the empty message without the note
+          return Center(
+            child: Text(
+              'No deletion requests found.',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
           );
         },
       ),
+
     );
   }
 
@@ -156,7 +174,7 @@ class _DeletionRequestsScreenState extends State<DeletionRequestsScreen> {
       // Query the 'deletions' collection to find the document with the userId equal to the current user's ID
       QuerySnapshot deletionDocs = await firestore
           .collection('deletions')
-          .where('userId', isEqualTo: email)
+          .where('userId', isEqualTo: userId)
           .get();
 
       // Iterate through the matching documents and delete them

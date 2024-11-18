@@ -36,7 +36,7 @@ class _CheckLogsScreenState extends State<CheckLogsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
           'Activity Logs',

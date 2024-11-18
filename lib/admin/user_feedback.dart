@@ -22,7 +22,7 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
           'User Feedback',

@@ -243,7 +243,7 @@ class _AddDataPageState extends State<AddDataPage> {
       backgroundColor: Colors.black, // Set background color to dark
       appBar: AppBar(
         centerTitle: true,
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         title: Text('Add Data',
           style: TextStyle(
           color: Colors.white,
@@ -252,7 +252,7 @@ class _AddDataPageState extends State<AddDataPage> {
           fontWeight: FontWeight.bold,
         ),
         ),
-        backgroundColor: Colors.grey[900], // Dark app bar
+        backgroundColor: Colors.black, // Dark app bar
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
