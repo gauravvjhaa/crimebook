@@ -153,6 +153,17 @@ class _DeletionRequestsScreenState extends State<DeletionRequestsScreen> {
       // Send email notification
       await sendEmail(email, userName);
 
+      // Query the 'deletions' collection to find the document with the userId equal to the current user's ID
+      QuerySnapshot deletionDocs = await firestore
+          .collection('deletions')
+          .where('userId', isEqualTo: email)
+          .get();
+
+      // Iterate through the matching documents and delete them
+      for (QueryDocumentSnapshot doc in deletionDocs.docs) {
+        await firestore.collection('deletions').doc(doc.id).delete();
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('User $userName deleted successfully')),
       );

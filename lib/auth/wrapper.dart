@@ -100,13 +100,21 @@ class _WrapperState extends State<Wrapper> {
           // Check if user is banned
           String status = userData['status']?.toString().toLowerCase() ?? 'unbanned';
           if (status == 'banned') {
-            _showBannedDialog(); // Show a dialog informing the user they're banned
+            _showBannedDialog();
             return;
           }
 
           // Check for account deletion request
           if (userData.containsKey('deletionScheduledOn')) {
-            DateTime deletionDate = DateTime.parse(userData['deletionScheduledOn']);
+            var deletionTimestamp = userData['deletionScheduledOn'];
+            DateTime deletionDate;
+            if (deletionTimestamp is Timestamp) {
+              deletionDate = deletionTimestamp.toDate(); // Convert Timestamp to DateTime
+            } else if (deletionTimestamp is String) {
+              deletionDate = DateTime.parse(deletionTimestamp); // Parse if it's a string
+            } else {
+              throw Exception("Invalid deletionScheduledOn format.");
+            }
             _showDeletionDialog(user, deletionDate);
           } else {
             // Proceed based on the user's role
@@ -386,6 +394,17 @@ class _WrapperState extends State<Wrapper> {
                       await firestore.collection('users').doc(user.uid).update({
                         'deletionScheduledOn': FieldValue.delete(),
                       });
+
+                      // Query the 'deletions' collection to find the document with the userId equal to the current user's ID
+                      QuerySnapshot deletionDocs = await firestore
+                          .collection('deletions')
+                          .where('userId', isEqualTo: user.uid)
+                          .get();
+
+                      // Iterate through the matching documents and delete them
+                      for (QueryDocumentSnapshot doc in deletionDocs.docs) {
+                        await firestore.collection('deletions').doc(doc.id).delete();
+                      }
 
                       // Success Snack bar
                       Get.snackbar(

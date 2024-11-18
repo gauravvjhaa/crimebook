@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:crimebook/admin/log_impl.dart';
 
+import '../components/custom_dropdown.dart';
+import '../controllers/data_lists.dart';
+
 class SignupScreen extends StatefulWidget {
   @override
   _SignupScreenState createState() => _SignupScreenState();
@@ -483,22 +486,31 @@ class _SignupScreenState extends State<SignupScreen> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        // State field
-                        TextField(
-                          controller: stateController,
-                          decoration: InputDecoration(
-                            hintText: 'State/UT (Optional)',
-                            hintStyle: const TextStyle(color: Colors.black54),
-                            filled: true,
-                            fillColor: Colors.white.withOpacity(0.9),
-                            border: OutlineInputBorder(
+                        // State Dropdown
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 1.0),
+                          child: CustomDropdown(
+                            items: indianStatesAndTerritories, // List of states
+                            selectedValue: stateController.text.isNotEmpty ? stateController.text : 'N.A.',
+                            hint: 'Select State/UT (Optional)',
+                            hintTextColor: Colors.black54,
+                            itemTextColor: Colors.black87,
+                            onChanged: (value) {
+                              setState(() {
+                                stateController.text = value ?? 'N.A.';
+                              });
+                            },
+                            isSearchable: true, // Enables search functionality
+                            buttonDecoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide.none,
+                              border: Border.all(color: Colors.transparent),
+                              color: Colors.white.withOpacity(0.9),
                             ),
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 18.0, horizontal: 20.0),
+                            icon: Icons.arrow_drop_down,
+                            iconEnabledColor: Colors.black54,
                           ),
                         ),
+                        const SizedBox(height: 4),
                       ] else if (selectedRole == 'Admin') ...[
                         // Admin Secret Code field
                         TextField(
