@@ -152,6 +152,8 @@ class _AlertScreenState extends State<AlertScreen> {
   }
 
 
+
+
   /// Generate a custom warning message using Gemini based on the news title and location.
   Future<String?> generateWarningMessageWithGemini(String title, String location) async {
     try {
