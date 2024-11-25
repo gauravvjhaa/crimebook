@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:typed_data';
@@ -12,7 +11,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:cross_file/cross_file.dart';
 import 'package:crimebook/controllers/analysis_helper.dart';
 import 'package:crimebook/controllers/data_lists.dart';
 import 'package:crimebook/components/custom_dropdown.dart';
@@ -68,8 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
     startAutoScroll();
 
     _selectedLocation = indianStatesAndTerritories[0];
-    _selectedCrimeType = crimeTypes[0];
-    _selectedYear = years[0];
+    // _selectedCrimeType = crimeTypes[0];
+    // _selectedYear = years[0];
     _selectedAnalysisType = 'Bar Chart';
   }
 
@@ -188,10 +186,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           if (missingFields.isNotEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Please select: ${missingFields.join(', ')}')),
+                              SnackBar(
+                                content: Text(
+                                  'Please select: ${missingFields.join(', ')}',
+                                  style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                                ),
+                                backgroundColor: Colors.grey[300],
+                              ),
                             );
                             return; // Exit early if fields are missing
                           }
+
 
                           setState(() {
                             _isLoading = true;

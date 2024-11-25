@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class FeedbackScreen extends StatefulWidget {
+  const FeedbackScreen({super.key});
+
   @override
   _FeedbackScreenState createState() => _FeedbackScreenState();
 }
@@ -120,95 +124,183 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Modern UI for the feedback screen
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        title: Text('Hey there!',style: TextStyle(
-          color: Colors.white60,
-          letterSpacing: 4,
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),),
-        backgroundColor: Colors.black,
-      ),
-      backgroundColor: Colors.black,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              'We value your feedback!',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+    // Detect theme
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+
+    return Stack(
+      children: [
+        // Background image
+        Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/delhi-blast.jpeg'),
+              fit: BoxFit.cover,
             ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _feedbackController,
-              maxLines: 6,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: 'Write your feedback here...',
-                hintStyle: TextStyle(color: Colors.white54),
-                filled: true,
-                fillColor: Colors.white12,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Checkbox(
-                  value: _isAnonymous,
-                  activeColor: Colors.blue.shade900,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _isAnonymous = value ?? false;
-                    });
-                  },
-                ),
-                Text(
-                  'Submit anonymously',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : submitUserFeedback,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey,
-                  padding: EdgeInsets.symmetric(vertical: 11),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                child: _isLoading
-                    ? CircularProgressIndicator(
-                  valueColor:
-                  AlwaysStoppedAnimation<Color>(Colors.white),
-                )
-                    : Text(
-                  'Submit Feedback',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
+          child: Container(
+            color: Colors.blue.withOpacity(0.4),
+          ),
         ),
-      ),
+        // Semi-transparent gradient overlay
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter, // Start the gradient at the top
+              end: Alignment.bottomCenter, // End the gradient at the bottom
+              colors: [
+                isDarkMode
+                    ? Colors.black.withOpacity(0.6)
+                    : Colors.blue.withOpacity(0.6),
+                isDarkMode
+                    ? Colors.black.withOpacity(0.1)
+                    : Colors.blue.withOpacity(0.01),
+              ],
+              stops: const [0.0, 1.0], // The gradient covers the entire height
+            ),
+          ),
+        ),
+        // Main content
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: Text(
+              'CrimeBook',
+              style: TextStyle(
+                color: Colors.white,
+                letterSpacing: 4,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    // Animated feedback icon
+                    Icon(
+                      Icons.feedback,
+                      size: 100,
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'We value your feedback!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 10.0,
+                            color: Colors.black.withOpacity(0.5),
+                            offset: Offset(2.0, 2.0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 10,
+                            offset: Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        controller: _feedbackController,
+                        maxLines: 6,
+                        style: TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                          hintText: 'Write your feedback here...',
+                          hintStyle: TextStyle(color: Colors.black54),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(16),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Theme(
+                          data: ThemeData(
+                            unselectedWidgetColor: Colors.white,
+                          ),
+                          child: Checkbox(
+                            value: _isAnonymous,
+                            activeColor: Colors.red,
+                            checkColor: Colors.white,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _isAnonymous = value ?? false;
+                              });
+                            },
+                          ),
+                        ),
+                        Text(
+                          'Submit anonymously',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _isLoading ? null : submitUserFeedback,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.greenAccent,
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: _isLoading
+                            ? SpinKitFadingCircle(
+                          color: Colors.black,
+                          size: 24.0,
+                        )
+                            : Text(
+                          'Submit Feedback',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Loading indicator
+              if (_isLoading)
+                Container(
+                  color: Colors.black.withOpacity(0.5),
+                  child: const Center(
+                    child: SpinKitFadingCircle(
+                      color: Colors.white,
+                      size: 60.0,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

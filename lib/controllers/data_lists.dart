@@ -82,7 +82,6 @@ final List<String> indianStatesAndTerritoriesModified = [
   'Puducherry',
 ];
 
-
 // List of Crime Types
 final List<String> crimeTypes = [
   'Any',

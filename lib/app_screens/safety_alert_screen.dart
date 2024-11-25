@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,6 +12,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import '../components/colors_file.dart';
 
 enum Severity {
   high,
@@ -120,13 +123,13 @@ class _AlertScreenState extends State<AlertScreen> {
           String? safetyTip = await generateSafetyTipWithGemini(title, location);
 
           alerts.add(CrimeAlert(
-            warningMessage: warningMessage ?? "Alert message can't be shown due to ethical reasons",
+            warningMessage: warningMessage ?? "Please stay vigilant and follow the necessary precautions",
             summary: summary,
             location: location,
             date: DateTime.parse(publishedAt),
             url: url,
             severity: Severity.high,
-            safetyTip: safetyTip ?? "Safety tip can't be shown due to ethical reasons",
+            safetyTip: safetyTip ?? "Please stay vigilant and follow the necessary precautions",
           ));
         }
 
@@ -183,6 +186,17 @@ class _AlertScreenState extends State<AlertScreen> {
         color: isDarkMode ? Colors.grey[350] : Colors.white,
         child: Column(
           children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '   Safety Alerts!',
+                style: GoogleFonts.poppins(
+                  color: isDarkMode ? darkModeHead : lightModeHead,
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             _buildLocationInput(),
             Expanded(
               child: isLoading ? _buildLoadingIndicators() : _buildAlertsList(),
