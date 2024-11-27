@@ -142,7 +142,7 @@ class GoogleAuthService {
         errorMessage,
         snackPosition: SnackPosition.BOTTOM,
         margin: const EdgeInsets.all(16),
-        backgroundColor: Colors.red.withOpacity(0.9), // Red background for error
+        backgroundColor: Colors.red.withOpacity(0.5), // Red background for error
         colorText: Colors.white,
       );
     } catch (e) {
@@ -152,7 +152,7 @@ class GoogleAuthService {
         'An error occurred: $e',
         snackPosition: SnackPosition.BOTTOM,
         margin: const EdgeInsets.all(16),
-        backgroundColor: Colors.red.withOpacity(0.9), // Red background for error
+        backgroundColor: Colors.red.withOpacity(0.5), // Red background for error
         colorText: Colors.white,
       );
     }

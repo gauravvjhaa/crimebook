@@ -35,8 +35,8 @@ class _AddDataPageState extends State<AddDataPage> {
               '- month (String)\n'
               '- cases (Integer)\n\n'
               'Example:\n'
-              'crime_type,location,year,month,cases\n'
-              'Theft and Burglary,Delhi,2023,January,50',
+              'crime_type,location,year,cases\n'
+              'Theft and Burglary,Delhi,2023,50',
           style: TextStyle(fontSize: 16, color: Colors.white),
         ),
       ),
@@ -64,7 +64,6 @@ class _AddDataPageState extends State<AddDataPage> {
     }
   }
 
-  // Method to process and upload the CSV file
   Future<void> _processAndUploadFile() async {
     if (_selectedFile == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -95,8 +94,8 @@ class _AddDataPageState extends State<AddDataPage> {
       // Assuming the first row is the header
       List<String> header = fields[0].map((e) => e.toString()).toList();
 
-      // Required headers
-      List<String> requiredHeaders = ['crime_type', 'location', 'year', 'month', 'cases'];
+      // Required headers for the new data format
+      List<String> requiredHeaders = ['Location', 'Year', 'Number', 'Category'];
 
       // Check if required headers are present
       for (String requiredHeader in requiredHeaders) {
@@ -115,11 +114,12 @@ class _AddDataPageState extends State<AddDataPage> {
           String key = header[j];
           dynamic value = row[j];
 
-          // Convert value to appropriate type
-          if (key == 'year' || key == 'cases') {
+          // Convert values to appropriate types
+          if (key == 'Year' || key == 'Number') {
             value = int.tryParse(value.toString());
             if (value == null) {
-              throw Exception('Invalid integer value in column $key at row ${i + 1}.');
+              throw Exception(
+                  'Invalid integer value in column $key at row ${i + 1}.');
             }
           } else {
             value = value.toString();
@@ -157,24 +157,25 @@ class _AddDataPageState extends State<AddDataPage> {
     }
   }
 
-  // Method to upload data to Firestore
   Future<void> _uploadDataToFirestore(List<Map<String, dynamic>> records) async {
     final batchSize = 500;
     WriteBatch batch = FirebaseFirestore.instance.batch();
     int count = 0;
 
     for (Map<String, dynamic> record in records) {
-      // Create a custom document ID (optional)
-      String docId = '${record['location']}_${record['crime_type']}_${record['year']}_${record['month']}';
-      docId = docId.replaceAll(' ', '_');
+      // Create a custom document ID based on the new columns
+      String docId =
+          '${record['Location']}_${record['Category']}_${record['Year']}';
+      docId = docId.replaceAll(' ', '_'); // Replace spaces with underscores
 
-      DocumentReference docRef = FirebaseFirestore.instance.collection('data').doc(docId);
+      DocumentReference docRef =
+      FirebaseFirestore.instance.collection('data').doc(docId);
 
-      // Add to batch
+      // Add record to batch
       batch.set(docRef, record, SetOptions(merge: true));
       count++;
 
-      // Commit batch every 500 writes
+      // Commit the batch every 500 writes to optimize performance
       if (count % batchSize == 0) {
         await batch.commit();
         batch = FirebaseFirestore.instance.batch();
@@ -190,7 +191,8 @@ class _AddDataPageState extends State<AddDataPage> {
   // Method to upload the file to Firebase Storage (optional)
   Future<void> _uploadFileToStorage(File file) async {
     try {
-      String fileName = 'uploaded_files/${DateTime.now().millisecondsSinceEpoch}.csv';
+      String fileName =
+          'uploaded_files/${DateTime.now().millisecondsSinceEpoch}.csv';
       Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
       await storageRef.putFile(file);
       print('File uploaded to Firebase Storage at $fileName');
@@ -202,7 +204,8 @@ class _AddDataPageState extends State<AddDataPage> {
   // Method to view data in Firestore
   Future<void> _viewData() async {
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('data').get();
+      QuerySnapshot snapshot =
+      await FirebaseFirestore.instance.collection('data').get();
 
       List<Map<String, dynamic>> records = snapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -217,14 +220,16 @@ class _AddDataPageState extends State<AddDataPage> {
         context: context,
         builder: (context) => AlertDialog(
           backgroundColor: Colors.grey[850],
-          title: Text('data collection', style: TextStyle(color: Colors.purple[100])),
+          title: Text('data collection',
+              style: TextStyle(color: Colors.purple[100])),
           content: SingleChildScrollView(
             child: Text(jsonData, style: TextStyle(color: Colors.white)),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Close', style: TextStyle(color: Theme.of(context).primaryColor)),
+              child: Text('Close',
+                  style: TextStyle(color: Theme.of(context).primaryColor)),
             ),
           ],
         ),
@@ -244,13 +249,14 @@ class _AddDataPageState extends State<AddDataPage> {
       appBar: AppBar(
         centerTitle: true,
         // automaticallyImplyLeading: false,
-        title: Text('Add Data',
+        title: Text(
+          'Add Data',
           style: TextStyle(
-          color: Colors.white,
-          letterSpacing: 4,
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+            color: Colors.white,
+            letterSpacing: 4,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: Colors.black, // Dark app bar
       ),
@@ -266,7 +272,8 @@ class _AddDataPageState extends State<AddDataPage> {
                 size: 100.0,
               ),
               SizedBox(height: 20),
-              Text('Processing...', style: TextStyle(color: Colors.white)),
+              Text('Processing...',
+                  style: TextStyle(color: Colors.white)),
             ],
           ),
         )
@@ -284,12 +291,18 @@ class _AddDataPageState extends State<AddDataPage> {
                       backgroundColor: Colors.grey[400],
                     ),
                     onPressed: _pickCsvFile,
-                    child: Text('Select CSV File', style: TextStyle(color: Colors.black),),
+                    child: Text(
+                      'Select CSV File',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
                   SizedBox(height: 5),
                   Text(
                     _statusMessage,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                   SizedBox(height: 5),
                   ElevatedButton(
@@ -297,7 +310,10 @@ class _AddDataPageState extends State<AddDataPage> {
                       backgroundColor: Colors.grey[400],
                     ),
                     onPressed: _processAndUploadFile,
-                    child: Text('Add Data', style: TextStyle(color: Colors.black),),
+                    child: Text(
+                      'Add Data',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
                 ],
               ),
@@ -307,7 +323,10 @@ class _AddDataPageState extends State<AddDataPage> {
                   backgroundColor: Colors.yellow[400],
                 ),
                 onPressed: _viewData,
-                child: Text('View Current Crime Data', style: TextStyle(fontSize: 15),),
+                child: Text(
+                  'View Current Crime Data',
+                  style: TextStyle(fontSize: 15),
+                ),
               ),
             ],
           ),

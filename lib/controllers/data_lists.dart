@@ -88,7 +88,9 @@ final List<String> crimeTypes = [
   'Theft and Burglary',
   'Sexual Crimes',
   'Cyber Crimes',
-  // Add more crime types as needed
+  'Murder',
+  'Crime_against_foreigners',
+  'Crime_against_women',
 ];
 
 // List of Years

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../auth/github_sign_in_provider.dart';
 import '../auth/google_sign_in_provider.dart';
 
 class LogInScreen extends StatefulWidget {
@@ -353,7 +354,7 @@ class _LogInScreenState extends State<LogInScreen> {
                               // Facebook Button
                               ElevatedButton.icon(
                                 onPressed: () {
-                                  // Handle Facebook Login logic
+                                  GitHubAuthService().loginWithGitHub(context);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF4267B2),
@@ -363,8 +364,8 @@ class _LogInScreenState extends State<LogInScreen> {
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                 ),
-                                icon: Image.asset('assets/images/facebook_icon.png', height: 20),
-                                label: const Text('Facebook'),
+                                icon: Image.asset('assets/images/github_icon.png', height: 20),
+                                label: const Text('Github'),
                               ),
                             ],
                           ),
