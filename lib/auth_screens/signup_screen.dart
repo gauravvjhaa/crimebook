@@ -24,6 +24,7 @@ class _SignupScreenState extends State<SignupScreen> {
   DateTime? dob; // Optional
   String? selectedGender; // Optional
   bool _obscurePassword = true;
+  bool _obscureAdminCode = true;
   bool _isLoading = false;
 
   // Gender dropdown options
@@ -515,17 +516,28 @@ class _SignupScreenState extends State<SignupScreen> {
                         // Admin Secret Code field
                         TextField(
                           controller: adminCodeController,
+                          obscureText: _obscureAdminCode, // Set to true for hidden input
                           decoration: InputDecoration(
                             hintText: 'Enter Admin Secret Code',
                             hintStyle: const TextStyle(color: Colors.black54),
                             filled: true,
                             fillColor: Colors.white.withOpacity(0.9),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscureAdminCode ? Icons.visibility_off : Icons.visibility,
+                                color: Colors.black54,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscureAdminCode = !_obscureAdminCode; // Toggle visibility
+                                });
+                              },
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                               borderSide: BorderSide.none,
                             ),
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 18.0, horizontal: 20.0),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 20.0),
                           ),
                         ),
                       ],
