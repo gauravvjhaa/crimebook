@@ -79,20 +79,22 @@ CrimeBook is a mobile application developed to make crime data more accessible a
 
 ## 🖼️ Screenshots
 
-### Admin Panel
-![Admin Panel](screenshots/Admin.png)
-
 ### Authentication Screen
 ![Authentication Screen](screenshots/Auth.png)
-
-### Dark Theme
-![Dark Theme](screenshots/Dark.png)
 
 ### Light Theme
 ![Light Theme](screenshots/Light.png)
 
+
+### Dark Theme
+![Dark Theme](screenshots/Dark.png)
+
 ### Miscellaneous
 ![Miscellaneous](screenshots/Misc.png)
+
+### Admin Panel
+![Admin Panel](screenshots/Admin.png)
+
 
 ---
 
